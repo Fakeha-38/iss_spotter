@@ -19,17 +19,27 @@ const fetchMyIP = function(callback) {
 
     const ip = body.ip;
     callback(null, ip);
+    return ip;
   });
 };
 
-// var http = require('http');
-// const fetchMyIP = function(callback) { 
-//   // use request to fetch IP address from JSON API
-//   http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function(resp) {
-//     resp.on('data', function(ip) {
-//       console.log("My public IP address is: " + ip);
-//     });
-//   });
-// }
+const fetchCoordsByIP = function(ip, callback) {
+  needle.get(`http://ipwho.is/${ip}`, (error, response, body) => {
+    if (error) {
+      return callback(error, null)
+    }
+    if (!body.success) {
+      const message = `Success status was ${body.success}. Server message says: ${body.message} when fetching for IP ${body.ip}`;
+      callback(Error(message), null);
+      return;
+    } 
+    const ipCoords = {
+      myIpLatitude: body.latitude,
+      myIpLongitude: body.longitude
+    }
+    return callback(null, ipCoords);
+  });
+ 
+};
 
-module.exports = { fetchMyIP };
+module.exports = { fetchMyIP, fetchCoordsByIP };
