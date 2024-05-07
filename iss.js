@@ -28,6 +28,10 @@ const fetchCoordsByIP = function(ip, callback) {
     if (error) {
       return callback(error, null)
     }
+    if (response.statusCode !== 200) {
+      callback(Error(`Status Code ${response.statusCode} when fetching IP: ${body}`), null);
+      return;
+    }
     if (!body.success) {
       const message = `Success status was ${body.success}. Server message says: ${body.message} when fetching for IP ${body.ip}`;
       callback(Error(message), null);
@@ -37,7 +41,7 @@ const fetchCoordsByIP = function(ip, callback) {
       myIpLatitude: body.latitude,
       myIpLongitude: body.longitude
     }
-    return callback(null, ipCoords);
+    callback(null, ipCoords);
   });
  
 };
