@@ -49,8 +49,9 @@ const fetchCoordsByIP = function(ip, callback) {
 
 const fetchISSFlyOverTimes = function(coords, callback) {
   // extracting lat and lon from the coords object to make the url
-  const lat = coords.latitude;
-  const lon = coords.longitude;
+  // const lat = coords.latitude;
+  // const lon = coords.longitude;
+  const { latitude: lat, longitude: lon } = coords;
   const url = `https://iss-flyover.herokuapp.com/json/?lat=${lat}&lon=${lon}`;
   needle.get(url, (error, response, body) => {
     if (error) {
